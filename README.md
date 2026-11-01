@@ -9,20 +9,20 @@ A distribution function may be explicit while its inverse has no familiar closed
 For a working distribution with density $g=\mathcal P'>0$ on an open interval $I$, CDF $\mathcal P$, and quantile $\mathcal Q=\mathcal P^{-1}$,
 
 $$
-\mathcal Q(p)=\frac{1}{\pi}\operatorname{Im}\int_I\kappa'(x)\operatorname{Log}\left(\frac{\mathcal P(\kappa(x))-p}{1-p}\right)\mathrm{d}x,
+\mathcal Q(p)=\frac{1}{\pi}\mathrm{Im}\int_I\kappa'(x)\mathrm{Log}\left(\frac{\mathcal P(\kappa(x))-p}{1-p}\right)\mathrm{d}x,
 \qquad \kappa(x)=x+\mathrm{i}h(x),\qquad 0<p<1.
 $$
 
 The height $h>0$ is built from the density and does not depend on $p$. The idea is to keep the real part of the density positive on each vertical segment from $x$ to $x+\mathrm{i}h(x)$. Then
 
 $$
-\operatorname{Im}\mathcal P(x+\mathrm{i}y)=\int_0^y\operatorname{Re}g(x+\mathrm{i}t)\mathrm{d}t>0,\qquad 0<y\le h(x),
+\mathrm{Im}\mathcal P(x+\mathrm{i}y)=\int_0^y\mathrm{Re}g(x+\mathrm{i}t)\mathrm{d}t>0,\qquad 0<y\le h(x),
 $$
 
 so the complex CDF cannot equal a real probability above the axis, and the contour isolates the real quantile. Endpoint estimates complete the argument. The density form of the same identity is
 
 $$
-\mathcal Q(p)=-\frac{1}{\pi}\operatorname{Im}\int_I\kappa(x)\kappa'(x)\frac{g(\kappa(x))}{\mathcal P(\kappa(x))-p}\mathrm{d}x.
+\mathcal Q(p)=-\frac{1}{\pi}\mathrm{Im}\int_I\kappa(x)\kappa'(x)\frac{g(\kappa(x))}{\mathcal P(\kappa(x))-p}\mathrm{d}x.
 $$
 
 Every strictly positive real-analytic density on an open interval admits such a contour after a known change of coordinate to $(0,1)$, with no moment assumption (Theorem 2.1). The logarithmic form needs a vanishing boundary term in addition, which is checked separately. Appendix B has the proofs and endpoint conditions.
@@ -73,7 +73,7 @@ $$
 Implied volatility then has the exact finite-interval representation
 
 $$
-\sigma_{\mathrm{BS}}=\frac{1}{\pi\sqrt{\mathsf T}}\operatorname{Im}\int_0^1\nu_{\mathsf k}'(t)\operatorname{Log}\left(\frac{\mathsf c(\mathsf k,\nu_{\mathsf k}(t))-\bar{\mathsf c}}{1-\bar{\mathsf c}}\right)\mathrm{d}t,
+\sigma_{\mathrm{BS}}=\frac{1}{\pi\sqrt{\mathsf T}}\mathrm{Im}\int_0^1\nu_{\mathsf k}'(t)\mathrm{Log}\left(\frac{\mathsf c(\mathsf k,\nu_{\mathsf k}(t))-\bar{\mathsf c}}{1-\bar{\mathsf c}}\right)\mathrm{d}t,
 $$
 
 with principal branches and the contour
