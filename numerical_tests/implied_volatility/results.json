@@ -34,7 +34,7 @@
       "recovered_total_volatility": "0.4",
       "absolute_error": "3.7615819e-37",
       "relative_error": "9.4039548e-37",
-      "seconds": 6.06976030000078
+      "seconds": 3.534551000004285
     },
     {
       "k": "0.05",
@@ -43,7 +43,7 @@
       "recovered_total_volatility": "0.4",
       "absolute_error": "6.6819118e-52",
       "relative_error": "1.6704779e-51",
-      "seconds": 18.393179099992267
+      "seconds": 8.464260400010971
     },
     {
       "k": "0.5",
@@ -52,7 +52,7 @@
       "recovered_total_volatility": "0.8",
       "absolute_error": "7.5231638e-37",
       "relative_error": "9.4039548e-37",
-      "seconds": 5.615019000004395
+      "seconds": 2.5425417000078596
     },
     {
       "k": "0.5",
@@ -61,7 +61,7 @@
       "recovered_total_volatility": "0.8",
       "absolute_error": "0.0",
       "relative_error": "0.0",
-      "seconds": 14.931922700008727
+      "seconds": 6.1292984999890905
     },
     {
       "k": "1",
@@ -70,7 +70,7 @@
       "recovered_total_volatility": "1.5000000000000000000000000000001262",
       "absolute_error": "1.2619505e-31",
       "relative_error": "8.4130037e-32",
-      "seconds": 7.116831299994374
+      "seconds": 2.810624399993685
     },
     {
       "k": "1",
@@ -79,7 +79,7 @@
       "recovered_total_volatility": "1.5",
       "absolute_error": "0.0",
       "relative_error": "0.0",
-      "seconds": 11.934821699993336
+      "seconds": 5.033685799993691
     }
   ],
   "grid": [
@@ -1182,5 +1182,5 @@
     "matplotlib": "3.11.2",
     "mpmath": "1.3.0"
   },
-  "seconds": 74.07973729999503
+  "seconds": 34.582325000010314
 }

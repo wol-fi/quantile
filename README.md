@@ -1,91 +1,118 @@
-# Explicit quantile representations: numerical verification
+# Explicit quantile representations
 
-Code and results for the numerical verification in the online appendix of
+A distribution function may be explicit while its inverse has no familiar closed form. This project gives exact integral representations of quantile functions. They use forward functions only, along a contour chosen without knowing the quantile. One contour serves every probability level.
 
-> Wolfgang Schadner (2026), *A general technique for explicit quantile representations*, working paper.
+**Paper:** Wolfgang Schadner (2026), *A general technique for explicit quantile representations*, [working paper](paper/working_paper.pdf).
 
-The paper constructs contours, chosen independently of the probability level, that turn the classical root formula into exact quantile integrals using forward functions only. This repository evaluates those integrals and compares them with independently computed reference values. The comparisons measure agreement on these test sets; they are not uniform quadrature error bounds. Equation and appendix numbers refer to the submitted version of the paper.
+## Main formula
 
-## Contents
+For a working distribution with density $g=\mathcal P'>0$ on an open interval $I$, CDF $\mathcal P$, and quantile $\mathcal Q=\mathcal P^{-1}$,
 
-| Folder | Paper | What it does |
-| --- | --- | --- |
-| [`distribution_quantiles/`](distribution_quantiles) | Appendix D.1, Figure D.1 | Quantile integrals for twelve working laws at eight probability levels |
-| [`implied_volatility/`](implied_volatility) | Appendix D.2, Figure D.2 | The Black-Scholes implied-volatility integral, Eq. (25) |
+$$
+\mathcal Q(p)=\frac{1}{\pi}\operatorname{Im}\int_I\kappa'(x)\operatorname{Log}\left(\frac{\mathcal P(\kappa(x))-p}{1-p}\right)\mathrm{d}x,
+\qquad \kappa(x)=x+\mathrm{i}h(x),\qquad 0<p<1.
+$$
 
-Each folder holds the scripts together with the results and figures they produce.
+The height $h>0$ is built from the density and does not depend on $p$. The idea is to keep the real part of the density positive on each vertical segment from $x$ to $x+\mathrm{i}h(x)$. Then
 
-## Reproducing the results
+$$
+\operatorname{Im}\mathcal P(x+\mathrm{i}y)=\int_0^y\operatorname{Re}g(x+\mathrm{i}t)\mathrm{d}t>0,\qquad 0<y\le h(x),
+$$
 
-Python 3.12 was used. The pinned versions in `requirements.txt` are the ones that produced the stored results.
+so the complex CDF cannot equal a real probability above the axis, and the contour isolates the real quantile. Endpoint estimates complete the argument. The density form of the same identity is
 
-```bash
-pip install -r requirements.txt
-```
+$$
+\mathcal Q(p)=-\frac{1}{\pi}\operatorname{Im}\int_I\kappa(x)\kappa'(x)\frac{g(\kappa(x))}{\mathcal P(\kappa(x))-p}\mathrm{d}x.
+$$
 
-**Distribution quantiles** (about 12 minutes on 8 cores):
+Every strictly positive real-analytic density on an open interval admits such a contour after a known change of coordinate to $(0,1)$, with no moment assumption (Theorem 2.1). The logarithmic form needs a vanishing boundary term in addition, which is checked separately. Appendix B has the proofs and endpoint conditions.
 
-```bash
-cd distribution_quantiles
-python quantile_accuracy_table.py
-python plot_heatmap.py
-```
+## Explicit contours
 
-To recompute only some rows, pass their 0-based indices, for example `python quantile_accuracy_table.py 4 10 11`. A partial run keeps the other rows of the existing `results.json`.
+Table 1 of the paper lists the working density $g$, the height $h$, and the map back to the original quantile $\widetilde{\mathcal Q}$. Here $\mathcal Q$ is the working quantile, $\mu$ and $\sigma>0$ are location and scale, and shape symbols are local to each row.
 
-**Black-Scholes implied volatility** (a few minutes):
+| Distribution | $g(x)$ | $h(x)$ | $\widetilde{\mathcal Q}(p)$ |
+| --- | --- | --- | --- |
+| **Generalized beta** | $\dfrac{x^{a-1}(1-x)^{b-1}}{\mathrm B(a,b)}$ | $\dfrac{x(1-x)}{1+\lvert a-1\rvert(1-x)+\lvert b-1\rvert x}$ | $\sigma\left[\dfrac{\mathcal Q(p)}{1-\rho\mathcal Q(p)}\right]^{1/c}$ |
+| **Generalized gamma** | $\dfrac{x^{a-1}e^{-x}}{\Gamma(a)}$ | $\dfrac{x}{1+\lvert a-1\rvert+x}$ | $\sigma[\mathcal Q(p)]^{1/c}$ |
+| **Generalized inverse Gaussian** | $\dfrac{x^{a-1}}{2K_a(b)}\exp\left[-\dfrac{b}{2}\left(x+\dfrac{1}{x}\right)\right]$ | $\dfrac{x^2}{b+2\lvert a-1\rvert x+bx^2}$ | $\sigma\mathcal Q(p)$ |
+| **Generalized hyperbolic** | $g_{\mathrm{GH}}(x)$ | $h_{\mathrm{GH}}$ | $\mu+\sigma\mathcal Q(p)$ |
+| **Generalized extreme value**, $a\ne0$ | $e^{-x}$ | $\dfrac{x}{1+x}$ | $\mu+\dfrac{\sigma}{a}\left([\mathcal Q(1-p)]^{-a}-1\right)$ |
+| **Generalized extreme value**, $a=0$ | $e^{-x}$ | $\dfrac{x}{1+x}$ | $\mu-\sigma\log\mathcal Q(1-p)$ |
+| Normal | $\phi(x)$ | $\dfrac{1}{2(1+x^2)}$ | $\mu+\sigma\mathcal Q(p)$ |
+| Student's t | $t_a(x)$ | $\dfrac{\sqrt a}{2(a+1)}$ | $\mu+\sigma\mathcal Q(p)$ |
+| Cauchy | $\dfrac{1}{\pi(1+x^2)}$ | $1/4$ | $\mu+\sigma\mathcal Q(p)$ |
+| Variance gamma | $g_\pm(x)$ | $h_{\mathrm{VG}}(x)$ | $\mu+\sigma\mathcal Q(p)$ |
+| Log-normal | $\phi(x)$ | $\dfrac{1}{2(1+x^2)}$ | $\sigma\exp[a\mathcal Q(p)]$ |
 
-```bash
-cd implied_volatility
-python verify_implied_volatility.py
-```
+Notes:
 
-`--smoke` runs four quick cases, and `--skip-mp` skips the 35- and 50-digit checks.
+- $\phi$ is the standard normal density, and $t_a$ is the Student density with $a>0$ degrees of freedom. Student and Cauchy use the bounded observable $G(z)=\arctan z$ in place of $\kappa$ in the density form (Eq. A.21), which covers laws without a first moment.
+- For generalized hyperbolic, $g_{\mathrm{GH}}$ is the standardized density with $a\in\mathbb R$ and $b>\lvert d\rvert$, and, with $D=3/2+\lvert a-1/2\rvert-a$,
 
-## Distribution quantiles
+$$
+h_{\mathrm{GH}}=\min\left(\frac12,\frac{e^{-b(1-\sqrt3/2)}(\sqrt3/2)^{D}}{2\lvert d\rvert+4b/\sqrt3+8D/3}\right).
+$$
 
-The script evaluates the residue form of the quantile integral, Eq. (4), with the contour heights of Section 3. Student's t uses the arctangent observable, Eq. (A.21), and the variance-gamma law uses the half-axis representation of Theorem A.2.
+- For variance gamma, $g_\pm$ are the two half-axis subdensities on $(0,\infty)$, with $a>-1/2$ and $d\in\mathbb R$. The sign of $p-\mathcal P(0)$ selects the half-axis, and $\lvert p-\mathcal P(0)\rvert$ sets the target mass (Theorem A.2). The height is
 
-| Row | Working law | Parameters |
-| --- | --- | --- |
-| GB | Beta | (a, b) = (0.3, 0.6) and (2.5, 3) |
-| GG, GEV | Gamma | a = 0.4 and a = 1 (exponential, the GEV working law) |
-| GIG | Inverse Gaussian | (a, b) = (-1/2, 1) |
-| GH | Hyperbolic, normal inverse Gaussian | (a, b, d) = (1, 1.5, 0.5) and (-1/2, 2, 1) |
-| Normal | Standard normal, also the log-normal working law | |
-| Student's t | | a = 1/2 and a = 5 |
-| VG | Variance gamma | (a, d) = (-0.3, 0.15) and (1.5, 0.2) |
+$$
+h_{\mathrm{VG}}(x)=\frac{x}{8\cdot2^{\lvert a\rvert}\left[1+2\lvert a\rvert+\left(\sqrt{1+d^2}+\lvert d\rvert\right)x\right]}.
+$$
 
-**Method.**
-
-- Each integral uses composite 20-point Gauss-Legendre quadrature in 24-digit arithmetic (mpmath). Each law uses one fixed mesh for all eight probability levels.
-- Cells lie in a logistic, logarithmic, or linear coordinate and are no wider than the contour height in that coordinate, except in the far Student tails beyond all tested quantiles.
-- Where no closed-form complex CDF is available (GIG, GH, VG), the CDF is accumulated along the contour with the matching Gauss-Legendre integration matrix.
-- Reference quantiles solve the real equation P(x) = p by Newton's method in 30-digit arithmetic, starting from double-precision SciPy values. Reference CDFs use closed forms for beta, gamma, normal, and Student's t, and double-exponential quadrature of the real density for GIG, GH, and VG.
-
-**Results.** All 96 relative errors are below 10<sup>-17</sup>, and 86 of them lie between 10<sup>-25</sup> and 10<sup>-22</sup>. The largest values reflect finite working precision. At the smallest quantiles, contributions of order one cancel, and for Student's t with a = 1/2 at p = 0.01 and 0.99 the tangent reconstruction amplifies errors by about |Q| = 10<sup>3</sup>.
-
-As controls, the accumulated CDFs reach their total masses to about 10<sup>-24</sup>, and the numerically integrated reference densities integrate to one within 10<sup>-30</sup>. The numerically integrated VG mass below zero agrees with the closed-form p<sub>0</sub> within 10<sup>-30</sup>.
-
-![Relative errors of the contour-integral quantiles](distribution_quantiles/quantile_accuracy_heatmap.png)
+Appendix A has the derivations.
 
 ## Black-Scholes implied volatility
 
-Call prices are generated from known volatilities at 100 decimal digits. The integral evaluator then receives only the log-moneyness k, the normalized price c, and the maturity T, and recovers the volatility by quadrature, without root finding. The grid has 42 combinations of k in {0.01, 0.05, 0.1, 0.25, 0.5, 1, 2} and total volatility in {0.1, 0.2, 0.4, 0.8, 1.5, 3}, with prices from 3.72 x 10<sup>-91</sup> to 0.866.
+Let $\mathsf c=\mathsf C/(\mathsf D\mathsf F)\in(0,1)$ be the call price normalized by the discount factor and forward, with observed value $\bar{\mathsf c}$. Let $\mathsf k=\log(\mathsf K/\mathsf F)>0$ be the log-moneyness, $\mathsf T>0$ the maturity, and $v=\sigma_{\mathrm{BS}}\sqrt{\mathsf T}$ the total volatility. With $\Phi$ the standard normal CDF, the pricing formula is
 
-| Check | Largest error |
-| --- | --- |
-| Absolute volatility error, 42-case grid | 1.33 x 10<sup>-15</sup> |
-| Relative volatility error, 42-case grid | 2.22 x 10<sup>-15</sup> |
-| Absolute repricing error, 42-case grid | 2.22 x 10<sup>-16</sup> |
-| Relative volatility error, 68 plotted points at T = 1 | 2.22 x 10<sup>-15</sup> |
-| Relative error, independent mpmath check at 35 digits | 8.41 x 10<sup>-32</sup> |
-| Relative error, independent mpmath check at 50 digits | 1.67 x 10<sup>-51</sup> |
+$$
+\mathsf c(\mathsf k,v)=\Phi\left(-\frac{\mathsf k}{v}+\frac{v}{2}\right)-e^{\mathsf k}\Phi\left(-\frac{\mathsf k}{v}-\frac{v}{2}\right).
+$$
 
-The exact argument of the logarithm lies in the upper half-plane and approaches the negative real axis as t tends to 0. There, rounding can flip the sign of its tiny imaginary part. Both evaluators therefore keep the upper-half-plane limit, with argument +pi. Without this safeguard the integral can return a wrong value.
+Implied volatility then has the exact finite-interval representation
 
-![Numerical verification of the implied-volatility formula](implied_volatility/implied_volatility_verification_paper.png)
+$$
+\sigma_{\mathrm{BS}}=\frac{1}{\pi\sqrt{\mathsf T}}\operatorname{Im}\int_0^1\nu_{\mathsf k}'(t)\operatorname{Log}\left(\frac{\mathsf c(\mathsf k,\nu_{\mathsf k}(t))-\bar{\mathsf c}}{1-\bar{\mathsf c}}\right)\mathrm{d}t,
+$$
+
+with principal branches and the contour
+
+$$
+\nu_{\mathsf k}(t)=\sqrt{\kappa_{\mathsf k}\left(\frac{t}{1-t}\right)},\qquad
+\kappa_{\mathsf k}(x)=x+\mathrm{i}\frac{x^2}{\mathsf k^2+x+x^2/4}.
+$$
+
+It involves only elementary functions and the error function, and it uses no root finding. The contour does not depend on $\bar{\mathsf c}$ or $\mathsf T$. Put-call parity, $\mathsf c(\mathsf k,v)=1-e^{\mathsf k}+e^{\mathsf k}\mathsf c(-\mathsf k,v)$, reduces $\mathsf k<0$ to the positive branch, and $\mathsf k=0$ reduces to a normal-CDF expression.
+
+Appendix E gives the corresponding representation of Bachelier (normal) implied volatility.
+
+## Repository
+
+```text
+paper/
+  working_paper.pdf         the paper with its online appendix
+numerical_tests/
+  README.md                 setup, results, and how to rerun
+  distribution_quantiles/   quantile integrals for twelve working laws (Appendix D.1)
+  implied_volatility/       the Black-Scholes integral (Appendix D.2)
+requirements.txt            Python packages used by the tests
+```
+
+The tests compare direct contour-integral evaluations with independently computed reference values. All 96 relative errors in the distribution test are below $10^{-17}$, and the largest relative volatility error in the 42-case Black-Scholes grid is $2.22\times10^{-15}$. These figures measure agreement on the test sets; they are not uniform error bounds. See [numerical_tests](numerical_tests) for details.
+
+## Citation
+
+```bibtex
+@unpublished{Schadner2026Technique,
+  author = {Schadner, Wolfgang},
+  title  = {A general technique for explicit quantile representations},
+  note   = {Working paper},
+  year   = {2026},
+  url    = {https://github.com/wol-fi/quantile}
+}
+```
 
 ## License
 
-MIT, see [LICENSE](LICENSE).
+The code is released under the MIT license, see [LICENSE](LICENSE).

@@ -176,13 +176,13 @@ def make_plot(grid: list[dict], curves: list[dict], paper: bool = False):
         pts = [r for r in curves if r["k"] == k]
         ax.scatter([r["c"] for r in pts], [r["sigma_integral"] for r in pts],
                    s=22, facecolors="white", edgecolors=color, linewidths=1.1, zorder=3)
-    ax.set(xlabel=r"Forward-normalized call price $\mathsf{c}$",
+    ax.set(xlabel=r"Observed normalized call price $\bar{\mathsf{c}}$",
            ylabel=r"Implied volatility $\sigma_{\mathrm{BS}}$ ($\mathsf{T}=1$)",
            xlim=(-0.008, 0.70), ylim=(0, 2.08), title="Direct evaluation of the finite-interval formula")
     ax.grid(alpha=0.16)
     ax.legend(title="Log-moneyness", loc="lower right", frameon=False)
     ax.text(0.02, 0.97, "Lines: known Black-Scholes prices and volatilities\n"
-            "Circles: contour integral, with only (k, c, T) as inputs",
+            r"Circles: contour integral, with only $(\mathsf{k},\bar{\mathsf{c}},\mathsf{T})$ as inputs",
             transform=ax.transAxes, va="top", fontsize=9.3)
 
     errors = np.array([[next(r["relative_error"] for r in grid
