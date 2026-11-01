@@ -2,7 +2,7 @@
 
 A distribution function may be explicit while its inverse has no familiar closed form. This project gives exact integral representations of quantile functions. They use forward functions only, along a contour chosen without knowing the quantile. One contour serves every probability level.
 
-**Paper:** Wolfgang Schadner (2026), *A general technique for explicit quantile representations*, [working paper](paper/working_paper.pdf).
+**Paper:** Wolfgang Schadner (2026), *A general technique for explicit quantile representations*, [working paper, version 1, November 1, 2026](paper/working_paper_v1.pdf).
 
 ## Main formula
 
@@ -91,7 +91,7 @@ Appendix E gives the corresponding representation of Bachelier (normal) implied 
 
 ```text
 paper/
-  working_paper.pdf         the paper with its online appendix
+  working_paper_v1.pdf      the paper with its online appendix, version 1
 numerical_tests/
   README.md                 setup, results, and how to rerun
   distribution_quantiles/   quantile integrals for twelve working laws (Appendix D.1)
@@ -115,4 +115,4 @@ The tests compare direct contour-integral evaluations with independently compute
 
 ## License
 
-The code is released under the MIT license, see [LICENSE](LICENSE).
+The code is released under the MIT license, see [LICENSE](LICENSE). The license does not cover the working paper in `paper/`, which remains the copyright of the author.

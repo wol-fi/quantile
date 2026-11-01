@@ -1,6 +1,6 @@
 # Numerical tests
 
-Code and results for Appendix D of the [working paper](../paper/working_paper.pdf). Each test evaluates the contour integrals directly and compares them with independently computed reference values. The comparisons measure agreement on these test sets; they are not uniform quadrature error bounds. Equation and appendix numbers refer to the working paper.
+Code and results for Appendix D of the [working paper](../paper/working_paper_v1.pdf). Each test evaluates the contour integrals directly and compares them with independently computed reference values. The comparisons measure agreement on these test sets; they are not uniform quadrature error bounds. Equation and appendix numbers refer to the working paper.
 
 | Folder | Paper | What it does |
 | --- | --- | --- |
