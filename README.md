@@ -4,6 +4,28 @@ A distribution function may be explicit while its inverse has no familiar closed
 
 **Paper:** Wolfgang Schadner (2026), *A general technique for explicit quantile representations*, [working paper, version 1, November 1, 2026](paper/working_paper_v1.pdf).
 
+## Example: Black-Scholes implied volatility
+
+The concept can be used to write implied volatility in terms of elementary functions and the normal CDF:
+
+$$
+\sigma_{\mathrm{BS}}=\frac{1}{\pi\sqrt{\mathsf T}}\mathrm{Im}\int_0^1\nu_{\mathsf k}'(t)\mathrm{Log}\left(\frac{\mathsf c(\mathsf k,\nu_{\mathsf k}(t))-\bar{\mathsf c}}{1-\bar{\mathsf c}}\right)\mathrm{d}t,
+$$
+
+where $\bar{\mathsf c}=\bar{\mathsf C}/(\mathsf D\mathsf F)\in(0,1)$ is the observed call price normalized by the discount factor and forward, $\mathsf k=\log(\mathsf K/\mathsf F)>0$ is the log-moneyness, $\mathsf T>0$ is the maturity, and $\mathsf c$ is the normalized Black-Scholes price at total volatility $v$, with $\Phi$ the standard normal CDF,
+
+$$
+\mathsf c(\mathsf k,v)=\Phi\left(-\frac{\mathsf k}{v}+\frac{v}{2}\right)-e^{\mathsf k}\Phi\left(-\frac{\mathsf k}{v}-\frac{v}{2}\right).
+$$
+
+The contour, with principal branches, is
+
+$$
+\nu_{\mathsf k}(t)=\sqrt{\frac{t}{1-t}+\mathrm{i}\frac{t^2}{\mathsf k^2(1-t)^2+t(1-t)+t^2/4}}.
+$$
+
+It does not depend on $\bar{\mathsf c}$ or $\mathsf T$, and the formula uses no root finding. Put-call parity, $\mathsf c(\mathsf k,v)=1-e^{\mathsf k}+e^{\mathsf k}\mathsf c(-\mathsf k,v)$, reduces $\mathsf k<0$ to the positive branch, and $\mathsf k=0$ reduces to a normal-CDF expression. Appendix E gives the corresponding representation of Bachelier (normal) implied volatility.
+
 ## Main formula
 
 For a working distribution with density $g=\mathcal P'>0$ on an open interval $I$, CDF $\mathcal P$, and quantile $\mathcal Q=\mathcal P^{-1}$,
@@ -61,31 +83,6 @@ h_{\mathrm{VG}}(x)=\frac{x}{8\cdot2^{\lvert a\rvert}\left[1+2\lvert a\rvert+\lef
 $$
 
 Appendix A has the derivations.
-
-## Black-Scholes implied volatility
-
-Let $\mathsf c=\mathsf C/(\mathsf D\mathsf F)\in(0,1)$ be the call price normalized by the discount factor and forward, with observed value $\bar{\mathsf c}$. Let $\mathsf k=\log(\mathsf K/\mathsf F)>0$ be the log-moneyness, $\mathsf T>0$ the maturity, and $v=\sigma_{\mathrm{BS}}\sqrt{\mathsf T}$ the total volatility. With $\Phi$ the standard normal CDF, the pricing formula is
-
-$$
-\mathsf c(\mathsf k,v)=\Phi\left(-\frac{\mathsf k}{v}+\frac{v}{2}\right)-e^{\mathsf k}\Phi\left(-\frac{\mathsf k}{v}-\frac{v}{2}\right).
-$$
-
-Implied volatility then has the exact finite-interval representation
-
-$$
-\sigma_{\mathrm{BS}}=\frac{1}{\pi\sqrt{\mathsf T}}\mathrm{Im}\int_0^1\nu_{\mathsf k}'(t)\mathrm{Log}\left(\frac{\mathsf c(\mathsf k,\nu_{\mathsf k}(t))-\bar{\mathsf c}}{1-\bar{\mathsf c}}\right)\mathrm{d}t,
-$$
-
-with principal branches and the contour
-
-$$
-\nu_{\mathsf k}(t)=\sqrt{\kappa_{\mathsf k}\left(\frac{t}{1-t}\right)},\qquad
-\kappa_{\mathsf k}(x)=x+\mathrm{i}\frac{x^2}{\mathsf k^2+x+x^2/4}.
-$$
-
-It involves only elementary functions and the error function, and it uses no root finding. The contour does not depend on $\bar{\mathsf c}$ or $\mathsf T$. Put-call parity, $\mathsf c(\mathsf k,v)=1-e^{\mathsf k}+e^{\mathsf k}\mathsf c(-\mathsf k,v)$, reduces $\mathsf k<0$ to the positive branch, and $\mathsf k=0$ reduces to a normal-CDF expression.
-
-Appendix E gives the corresponding representation of Bachelier (normal) implied volatility.
 
 ## Repository
 
